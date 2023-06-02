@@ -35,6 +35,11 @@ class CreditCard:
              self.balance = 0
         else:
             self.balance -= amount
+    
+    # report method
+    def report(self):
+        print(f"Account number: {self.account_number}, Balance: ${self.balance}")
+
 
 class RewardsCard(CreditCard): # inherits from CreditCard
     def __init__(self, account_number, credit_limit, rewards_rate):
@@ -54,8 +59,35 @@ class RewardsCard(CreditCard): # inherits from CreditCard
     def redeem_rewards(self, amount):
         self.rewards_pt -= amount
     
+    def make_purchase(self, amount):
+        if amount < 0  or amount > (self.credit_limit-self.balance):
+            print("Invalid Transaction")
+        else:
+            self.rewards_pt += amount
+            self.balance += amount
     
-## Uncomment all lines to test your class once completed
+    def report(self):
+        print(f"Account number: {self.account_number}, Balance: ${self.balance}, Rewards: {self.rewards_pt}")
+
+class CashbackCard(CreditCard): # inherits from CreditCard
+    def __init__(self, account_number, credit_limit, cash_back):
+        # call the superclass initialiser
+        super().__init__(account_number,credit_limit)
+        # add the cash_back attribute
+        self.cash_back = cash_back
+        self.cb_earned = 0
+    
+    def make_purchase(self, amount):
+        if amount < 0  or amount > (self.credit_limit-self.balance):
+            print("Invalid Transaction")
+        else:
+            self.balance += amount
+            self.cb_earned += amount*self.cash_back/100
+            self.balance -= self.cb_earned
+    
+    def report(self):
+        print(f"Account number: {self.account_number}, Balance: ${self.balance}, Cashback Earn: {self.cb_earned}")
+        
 
 my_credit_card = CreditCard(123456789, 5000)
 assert my_credit_card.account_number == 123456789
@@ -81,3 +113,16 @@ assert my_credit_card.get_balance() == 0
 print("All tests passed!")
 
 my_rewards_card = RewardsCard(12345678, 5000, 2)
+my_cashback_card = CashbackCard(11111, 5000, 2)
+
+my_rewards_card.make_purchase(900)
+my_rewards_card.make_purchase(1900)
+my_cashback_card.make_purchase(900)
+my_cashback_card.make_purchase(900)
+
+
+print(my_rewards_card.get_balance())
+print(my_cashback_card.get_balance())
+
+my_cashback_card.report()
+my_rewards_card.report()
