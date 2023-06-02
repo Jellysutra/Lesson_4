@@ -36,7 +36,25 @@ class CreditCard:
         else:
             self.balance -= amount
 
+class RewardsCard(CreditCard): # inherits from CreditCard
+    def __init__(self, account_number, credit_limit, rewards_rate):
+        # call the superclass initialiser
+        super().__init__(account_number,credit_limit)
+        # add the rewards_rate attribute
+        self.rewards_rate = rewards_rate
+        self.balance = 0
+        self.rewards_pt = 0
+    
+    def check_rewards(self):
+        return self.rewards_pt
 
+    def accumulate_rewards(self, amount):
+        self.rewards_pt += amount*self.rewards_rate/100
+    
+    def redeem_rewards(self, amount):
+        self.rewards_pt -= amount
+    
+    
 ## Uncomment all lines to test your class once completed
 
 my_credit_card = CreditCard(123456789, 5000)
@@ -62,3 +80,4 @@ assert my_credit_card.get_balance() == 0
 
 print("All tests passed!")
 
+my_rewards_card = RewardsCard(12345678, 5000, 2)
